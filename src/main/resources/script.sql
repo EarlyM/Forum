@@ -1,0 +1,84 @@
+create database forum;
+
+use forum;
+
+CREATE TABLE `groups` (
+  `GROUP_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ROLE` varchar(25) NOT NULL,
+  PRIMARY KEY (`GROUP_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `authorities` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `AUTHORITIES` varchar(25) NOT NULL,
+  `GROUP_ID` int(11) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FKi66x09lxt8lj3544m5dh4e9ad` (`GROUP_ID`),
+  CONSTRAINT `FKi66x09lxt8lj3544m5dh4e9ad` FOREIGN KEY (`GROUP_ID`) REFERENCES `groups` (`GROUP_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `users` (
+  `USERNAME` varchar(50) NOT NULL,
+  `PASSWORD` varchar(50) NOT NULL,
+  `GROUP_ID` int(11) NOT NULL,
+  PRIMARY KEY (`USERNAME`),
+  KEY `FK2ps7ujojdcl75k34ab2ulcqnm` (`GROUP_ID`),
+  CONSTRAINT `FK2ps7ujojdcl75k34ab2ulcqnm` FOREIGN KEY (`GROUP_ID`) REFERENCES `groups` (`GROUP_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `topic` (
+  `TOPIC_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `CREATED_DATE` datetime NOT NULL,
+  `TOPIC_SUBJECT` varchar(100) NOT NULL,
+  `TEXT` longtext NOT NULL,
+  `USERNAME` varchar(50) NOT NULL,
+  `UPDATE_DATE` datetime NOT NULL,
+  PRIMARY KEY (`TOPIC_ID`),
+  KEY `FKi5xco57n93igoum0bx5q5ykki` (`USERNAME`),
+  CONSTRAINT `FKa362xtwu3kna2m5rpj4dqh73s` FOREIGN KEY (`USERNAME`) REFERENCES `users` (`USERNAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `messages` (
+  `MASSAGE_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `CREATE_DATA` datetime NOT NULL,
+  `PARENT_ID` int(11) DEFAULT NULL,
+  `MESSAGE` longtext NOT NULL,
+  `USERNAME` varchar(50) NOT NULL,
+  `TOPIC_ID` int(11) NOT NULL,
+  `MESSAGE_ID` int(11) NOT NULL,
+  PRIMARY KEY (`MASSAGE_ID`),
+  KEY `FK6hbirqlx0nxipl12t3fyorsab` (`USERNAME`),
+  KEY `FK3m9m2ccmtj36khewoqnyf8xpv` (`TOPIC_ID`),
+  CONSTRAINT `FK3m9m2ccmtj36khewoqnyf8xpv` FOREIGN KEY (`TOPIC_ID`) REFERENCES `topic` (`TOPIC_ID`),
+  CONSTRAINT `FK6hbirqlx0nxipl12t3fyorsab` FOREIGN KEY (`USERNAME`) REFERENCES `users` (`USERNAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+insert into groups (groups.ROLE) value('User');
+insert into groups (groups.ROLE) value('Administrator');
+
+insert into authorities (authorities.AUTHORITIES, authorities.GROUP_ID) value ('ROLE_USER', '1');
+insert into authorities (authorities.AUTHORITIES, authorities.GROUP_ID) value ('ROLE_USER', '2');
+insert into authorities (authorities.AUTHORITIES, authorities.GROUP_ID) value ('ROLE_ADMINISTRATOR', '2');
+
+insert into users (users.USERNAME, users.PASSWORD, users.GROUP_ID) value('User', 'user', '1');
+insert into users (users.USERNAME, users.PASSWORD, users.GROUP_ID) value('Admin', 'admin', '2');
+
+INSERT INTO `topic` (`TOPIC_ID`,`CREATED_DATE`,`TOPIC_SUBJECT`,`TEXT`,`USERNAME`,`UPDATE_DATE`) VALUES (1,'2017-08-11 19:33:08','Subject','allslknsdglns','user','2017-08-14 04:45:18');
+INSERT INTO `topic` (`TOPIC_ID`,`CREATED_DATE`,`TOPIC_SUBJECT`,`TEXT`,`USERNAME`,`UPDATE_DATE`) VALUES (2,'2017-08-11 19:33:31','Sub','qwe','admin','2017-08-11 23:50:48');
+INSERT INTO `topic` (`TOPIC_ID`,`CREATED_DATE`,`TOPIC_SUBJECT`,`TEXT`,`USERNAME`,`UPDATE_DATE`) VALUES (3,'2017-08-13 04:13:59','Новая тема1','фывфафывфыафыв','user','2017-08-13 04:13:59');
+INSERT INTO `topic` (`TOPIC_ID`,`CREATED_DATE`,`TOPIC_SUBJECT`,`TEXT`,`USERNAME`,`UPDATE_DATE`) VALUES (4,'2017-08-13 04:17:03','Новая тема2','фывфафывфыафыв','user','2017-08-13 04:17:03');
+INSERT INTO `topic` (`TOPIC_ID`,`CREATED_DATE`,`TOPIC_SUBJECT`,`TEXT`,`USERNAME`,`UPDATE_DATE`) VALUES (5,'2017-08-13 04:20:23','Новая тема3','фывфафывфыафыв','user','2017-08-13 04:20:23');
+INSERT INTO `topic` (`TOPIC_ID`,`CREATED_DATE`,`TOPIC_SUBJECT`,`TEXT`,`USERNAME`,`UPDATE_DATE`) VALUES (6,'2017-08-13 04:35:06','Новая тема4','фывфафывфыафыв','user','2017-08-13 05:04:00');
+INSERT INTO `topic` (`TOPIC_ID`,`CREATED_DATE`,`TOPIC_SUBJECT`,`TEXT`,`USERNAME`,`UPDATE_DATE`) VALUES (7,'2017-08-14 02:59:40','asd','asd','user','2017-08-14 02:59:40');
+
+INSERT INTO `messages` (`MESSAGE_ID`,`CREATE_DATA`,`PARENT_ID`,`MESSAGE`,`USERNAME`,`TOPIC_ID`) VALUES (1,'2017-08-12 03:51:35',1,'text','user',1);
+INSERT INTO `messages` (`MESSAGE_ID`,`CREATE_DATA`,`PARENT_ID`,`MESSAGE`,`USERNAME`,`TOPIC_ID`) VALUES (2,'2017-08-12 03:52:12',2,'text','user',1);
+INSERT INTO `messages` (`MESSAGE_ID`,`CREATE_DATA`,`PARENT_ID`,`MESSAGE`,`USERNAME`,`TOPIC_ID`) VALUES (3,'2017-08-12 03:56:05',3,'text','user',1);
+INSERT INTO `messages` (`MESSAGE_ID`,`CREATE_DATA`,`PARENT_ID`,`MESSAGE`,`USERNAME`,`TOPIC_ID`) VALUES (4,'2017-08-12 03:58:01',1,'text','user',1);
+INSERT INTO `messages` (`MESSAGE_ID`,`CREATE_DATA`,`PARENT_ID`,`MESSAGE`,`USERNAME`,`TOPIC_ID`) VALUES (5,'2017-08-12 03:59:41',2,'text','user',1);
+INSERT INTO `messages` (`MESSAGE_ID`,`CREATE_DATA`,`PARENT_ID`,`MESSAGE`,`USERNAME`,`TOPIC_ID`) VALUES (6,'2017-08-12 04:02:58',3,'text','user',1);
+INSERT INTO `messages` (`MESSAGE_ID`,`CREATE_DATA`,`PARENT_ID`,`MESSAGE`,`USERNAME`,`TOPIC_ID`) VALUES (7,'2017-08-13 02:41:14',6,'text','user',1);
+INSERT INTO `messages` (`MESSAGE_ID`,`CREATE_DATA`,`PARENT_ID`,`MESSAGE`,`USERNAME`,`TOPIC_ID`) VALUES (8,'2017-08-13 02:41:43',1,'text','user',1);
+INSERT INTO `messages` (`MESSAGE_ID`,`CREATE_DATA`,`PARENT_ID`,`MESSAGE`,`USERNAME`,`TOPIC_ID`) VALUES (9,'2017-08-13 02:43:53',6,'q','user',1);
+INSERT INTO `messages` (`MESSAGE_ID`,`CREATE_DATA`,`PARENT_ID`,`MESSAGE`,`USERNAME`,`TOPIC_ID`) VALUES (10,'2017-08-13 05:04:00',10,'привет','user',6);
+INSERT INTO `messages` (`MESSAGE_ID`,`CREATE_DATA`,`PARENT_ID`,`MESSAGE`,`USERNAME`,`TOPIC_ID`) VALUES (17,'2017-08-14 04:45:18',17,'fasdzxcv','admin',1);
